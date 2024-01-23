@@ -2,12 +2,17 @@ package jpabook.jpashop.domain;
 
 import jakarta.persistence.*;
 import jpabook.jpashop.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.aspectj.weaver.ast.Or;
 
 @Entity
 @Getter @Setter
+// OrderItem 을 생성자로 생성하면 오류 발생
+// createOrderItem 생성 메소드를 이용하여 생성해야 함
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
     @Id @GeneratedValue
@@ -23,6 +28,9 @@ public class OrderItem {
     private Item item;
     private int orderPrice;
     private int count;
+
+//    protected OrderItem() {
+//    }
 
     //==생성 메서드==//
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
