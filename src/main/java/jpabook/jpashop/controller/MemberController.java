@@ -31,13 +31,11 @@ public class MemberController {
     }
 
     @PostMapping("/members/new")
-    @ResponseBody
-    public FieldError create(@Valid MemberForm form, BindingResult result) {
+    public String create(@Valid MemberForm form, BindingResult result) {
 
         if (result.hasErrors()) {
             log.info("create member error");
-            return result.getFieldError();
-//            return "members/createMemberForm";
+            return "members/createMemberForm";
         }
 
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
@@ -46,6 +44,14 @@ public class MemberController {
         member.setAddress(address);
 
         memberService.join(member);
-        return result.getFieldError();
+        return "redirect:/";
     }
+
+    @GetMapping("/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
+    }
+
 }
